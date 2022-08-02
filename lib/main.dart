@@ -37,7 +37,7 @@ class _GoogleMapSampleState extends State<GoogleMapSample> {
   double maxZoomLevel = 18;
   double minZoomLevel = 6;
 
-  late final _initPosition = CameraPosition(target: initLatLng, zoom: 14.5);
+  late final _initPosition = CameraPosition(target: initLatLng, zoom: 14.0);
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +63,7 @@ class _GoogleMapSampleState extends State<GoogleMapSample> {
           var floorZoomValue =
               (cameraPosition.zoom * baseNumber).floor() / baseNumber;
           final strZoomValue = floorZoomValue.toString();
-          print('比率は${cameraPosition.zoom.floor()}');
+          print('比率は${cameraPosition.zoom}');
           print(rangeValueReturn(strZoomValue));
           if (rangeValueReturn(strZoomValue) == true) {
             print("動いてるで");
