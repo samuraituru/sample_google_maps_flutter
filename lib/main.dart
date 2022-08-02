@@ -239,6 +239,7 @@ int yellowValueGet(String zoomValue) {
   }
 }
 
+// 引数からUint8List型でCancvasをリターンする関数
 Future<Uint8List> getBytesFromCanvas(int width, int height) async {
   final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
   final Canvas canvas = Canvas(pictureRecorder);
