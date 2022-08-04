@@ -48,3 +48,9 @@ app.*.map.json
 
 # map-api-key
 .env
+android/app/src/main/res/values/keys.xml
+
+# other device
+linux
+macos
+windows
