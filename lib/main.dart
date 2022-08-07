@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 void main() {
@@ -34,8 +35,8 @@ class _GoogleMapSampleState extends State<GoogleMapSample> {
   final _markers = <Marker>{};
   LatLng? ontapLatLng;
   final initLatLng = const LatLng(35.675, 139.770);
-  double maxZoomLevel = 18;
-  double minZoomLevel = 6;
+  final double maxZoomLevel = 18;
+  final double minZoomLevel = 6;
 
   late final _initPosition = CameraPosition(target: initLatLng, zoom: 14.0);
 
@@ -46,9 +47,10 @@ class _GoogleMapSampleState extends State<GoogleMapSample> {
         title: const Text("Google Maps Flutter"),
       ),
       body: GoogleMap(
+        mapType: MapType.terrain,
         onTap: (LatLng latLng) async {
           ontapLatLng = latLng;
-          await markerCreate(latLng);
+          await canvasMarkerCreate(latLng);
         },
         initialCameraPosition: _initPosition,
         markers: _markers,
@@ -64,8 +66,8 @@ class _GoogleMapSampleState extends State<GoogleMapSample> {
               (cameraPosition.zoom * baseNumber).floor() / baseNumber;
           final strZoomValue = floorZoomValue.toString();
           print('比率は${cameraPosition.zoom}');
-          print(rangeValueReturn(strZoomValue));
-          if (rangeValueReturn(strZoomValue) == true) {
+          print(isExecution(strZoomValue));
+          if (isExecution(strZoomValue) == true) {
             print("動いてるで");
             await canvasZoomAction(cameraPosition.zoom);
           }
@@ -75,7 +77,7 @@ class _GoogleMapSampleState extends State<GoogleMapSample> {
   }
 
   // zoomValueが1~16かつ「x.0」の場合はTrue、それ以外はFalseを返す
-  bool rangeValueReturn(String zoomValue) {
+  bool isExecution(String zoomValue) {
     String command = zoomValue;
     switch (command) {
       case '1.0':
@@ -151,9 +153,27 @@ class _GoogleMapSampleState extends State<GoogleMapSample> {
   }
 
   // CanvasMarkerを作成する関数
-  Future<void> markerCreate(LatLng latLng) async {
+  Future<void> canvasMarkerCreate(LatLng latLng) async {
     // 初期のCanvasサイズを指定
     final Uint8List markerIcon = await getBytesFromCanvas(50, 50);
+
+    Marker initMarker = Marker(
+      markerId: MarkerId(latLng.toString()), // IDにはlatLngを使用する
+      icon: BitmapDescriptor.fromBytes(markerIcon),
+      position: latLng,
+      onTap: () => onTapCanvasCallBack(latLng),
+    );
+
+    setState(() {
+      markerAdd(initMarker);
+    });
+  }
+
+  // CanvasMarkerを作成する関数
+  Future<void> assetsMarkerCreate(LatLng latLng) async {
+    const int iconsize = 100;
+    final Uint8List markerIcon =
+        await getBytesFromAsset('assets/images/flutter.png', iconsize);
 
     Marker initMarker = Marker(
       markerId: MarkerId(latLng.toString()), // IDにはlatLngを使用する
@@ -192,14 +212,14 @@ Marker canvasReturn(
 // Zoom値を元に濃度別のYellowパレットを返す関数
 Color colorReturn(int value) {
   String parameters = value.toString();
-  int yellowValue = yellowValueGet(parameters);
+  int yellowValue = gatYellowValue(parameters);
   ui.Color? yellow = Colors.yellow[yellowValue];
   print(yellow);
   return yellow!;
 }
 
 // Yellowパレットに渡す数字を返す関数
-int yellowValueGet(String zoomValue) {
+int gatYellowValue(String zoomValue) {
   String value = zoomValue;
   switch (value) {
     case '1.0':
@@ -239,12 +259,22 @@ int yellowValueGet(String zoomValue) {
   }
 }
 
+Future<Uint8List> getBytesFromAsset(String path, int width) async {
+  ByteData data = await rootBundle.load(path);
+  ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+      targetWidth: width);
+  ui.FrameInfo fi = await codec.getNextFrame();
+  return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+      .buffer
+      .asUint8List();
+}
+
 // 引数からUint8List型でCancvasをリターンする関数
 Future<Uint8List> getBytesFromCanvas(int width, int height) async {
   final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
   final Canvas canvas = Canvas(pictureRecorder);
   Color yellowcolors = colorReturn(width);
-  final Paint paint = Paint()..color = yellowcolors;
+  final Paint paint = Paint()..color = Colors.red;
   final Radius radius = Radius.circular(30.0);
 
   canvas.drawRRect(
