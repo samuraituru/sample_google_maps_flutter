@@ -47,7 +47,7 @@ class _GoogleMapSampleState extends State<GoogleMapSample> {
         title: const Text("Google Maps Flutter"),
       ),
       body: GoogleMap(
-        mapType: MapType.terrain,
+        //mapType: MapType.terrain,
         onTap: (LatLng latLng) async {
           ontapLatLng = latLng;
           await canvasMarkerCreate(latLng);
