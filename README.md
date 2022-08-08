@@ -11,7 +11,7 @@ https://pub.dev/documentation/google_maps_flutter/latest/
 ----
 ## API-KEY設定
 1. project配下に「map_api_key.env」という名前でファイルを生成してください。
-2. 生成したファイルに`MAP_API_KEY=共有したAPI-KEY`の形式で記載してください。
+2. 生成したファイルに`MAP_API_KEY=使用するAPI-KEY`の形式で記載してください。
 00. 読み込みが正しく行われている場合、Blackベースの地図が表示されます。
 
 ![API-KEY](https://user-images.githubusercontent.com/102897585/183320130-b25ca973-9387-4c51-8476-ef6ee64912e9.png)
@@ -68,7 +68,7 @@ CanvasとAssetの２種類で生成が確認できています。
 
 ----
 ## 地図そのものの見た目を柔軟に変更できるか
-Map StyleはGoogle Maps Platform内で柔軟に生成可能です。
+Map StyleはGoogle Maps Platform内で柔軟に生成可能です。\
 ・Roads\
 ・Landmarks\
 ・Labels\
