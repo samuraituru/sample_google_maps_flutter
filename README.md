@@ -1,8 +1,8 @@
 # sample_google_maps_flutter
 
 2つのパッケージを比較するためのプロジェクトです。\
-ここでは「google_maps_flutter」パッケージのサンプルアプリを公開します。
-https://pub.dev/documentation/google_maps_flutter/latest/
+ここでは「google_maps_flutter」パッケージのサンプルアプリを公開します。\
+[公式Documentを参照したい方はこちら](https://pub.dev/documentation/google_maps_flutter/latest/)
 
 ## 前提条件
 - API-KEYの設定が行われていること
